@@ -4,6 +4,7 @@ import ListOfGifs from "components/ListOfGifs"
 import { useGifs } from "hooks/useGifs"
 import useNearScreen from "hooks/useNearScreen"
 import debounce from "just-debounce-it"
+import { Helmet } from "react-helmet"
 
 export default function SearchResults({ params }) {
   const { keyword } = params
@@ -13,6 +14,9 @@ export default function SearchResults({ params }) {
     externalRef: loading ? null : externalRef,
     once: false,
   })
+
+  const title = gifs ? `Resultados de ${keyword}` : ""
+  const description = `Searching gifs of ${keyword}`
 
   const debounceHandleNextPage = useCallback(
     debounce(() => setPage((prevPage) => prevPage + 1), 200),
@@ -28,6 +32,11 @@ export default function SearchResults({ params }) {
 
   return (
     <>
+      <Helmet>
+        <title>{title} | Coolgif</title>
+        <meta name="description" content={description}></meta>
+      </Helmet>
+
       {loading ? (
         <Spinner />
       ) : (
